@@ -1,0 +1,30 @@
+== Saints and Sinners
+
+Rails App template for implementing user management, for both, users and admins.
+
+Admins are managed by levels, and using Devise with CanCan. Users are managed
+with Devise and with Omniauth-Facebook.
+
+The template uses Twitter Bootstrap and SimpleForm.
+
+
+== Getting Started
+
+1. Clone the project:
+       <tt>git clone address</tt>
+
+2. Go inside of the project and execute bundle:
+        <tt>bundle install</tt>
+
+3. Edit the config/database.yml
+
+4. Build the database and run de migrations
+
+5. Execute the server
+
+
+== TODO
+  
+  * Add support for Twitter, Google, and others
+
+  * Make an engine
