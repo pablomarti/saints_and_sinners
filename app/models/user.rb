@@ -69,6 +69,10 @@ class User < ActiveRecord::Base
   	authentications.build(:provider => auth['provider'], :uid => auth['uid'], :token => auth['credentials']['token'])
   end
 
+  def full_name
+    first_name.to_s + " " + last_name.to_s
+  end
+
   private
 	  def generate_random(str_length)
 	    charlist = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a

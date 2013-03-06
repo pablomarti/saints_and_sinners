@@ -5,7 +5,7 @@ SaintsSinners::Application.routes.draw do
   match 'auth/:provider/callback', to: 'auth#create'
   match 'auth/failure', to: redirect('/')
 
-  devise_for :admin_users, path_names: {sign_in: "login", sign_out: "logout"}, :path => "d"
+  devise_for :admin_users, path_names: {sign_in: "login", sign_out: "logout"}, :path => "d", :controllers => { :registrations => "admin_users/registrations", :sessions => "admin_users/sessions" }
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

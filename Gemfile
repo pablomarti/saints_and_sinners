@@ -19,10 +19,6 @@ group :assets do
   gem 'execjs'
 
   gem 'uglifier', '>= 1.0.3'
-
-  gem 'less-rails'
-  gem 'twitter-bootstrap-rails'
-  #gem 'bootstrap-sass'
 end
 
 # For user management
