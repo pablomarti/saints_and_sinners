@@ -11,10 +11,10 @@ The template uses Twitter Bootstrap and SimpleForm.
 == Getting Started
 
 1. Clone the project:
-       <tt>git clone address</tt>
+       git clone git@github.com:pablomarti/saints_and_sinners.git
 
 2. Go inside of the project and execute bundle:
-        <tt>bundle install</tt>
+        bundle install
 
 3. Edit the config/database.yml
 
