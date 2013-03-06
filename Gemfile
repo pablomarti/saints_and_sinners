@@ -41,7 +41,7 @@ gem 'simple_form'
 gem 'capistrano'
 
 # To use debugger
-gem 'debugger'
+gem 'debugger', group: [:development, :test]
 
 # Some cool errors
 group :development do

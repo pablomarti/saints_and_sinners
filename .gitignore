@@ -15,7 +15,8 @@
 /tmp
 
 # Ignore some other files
-config/database.yml
+/config/database.yml
+/config/fb_config.yml
 *.DS_Store
 db/schema.rb
 Gemfile.lock
