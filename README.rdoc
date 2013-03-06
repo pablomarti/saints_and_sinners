@@ -24,6 +24,6 @@ The template uses Twitter Bootstrap and SimpleForm.
 
 
 == TODO
-  *. Add support for Twitter, Google, and others
+* Add support for Twitter, Google, and others
 
-  *. Make an engine
+* Make an engine
