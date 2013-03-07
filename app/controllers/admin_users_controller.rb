@@ -32,6 +32,7 @@ class AdminUsersController < ApplicationController
 
   def edit
     @admin_user = AdminUser.find(params[:id])
+    @admin_user.get_roles
     @required_password = false
   end
 
@@ -39,8 +40,15 @@ class AdminUsersController < ApplicationController
     @admin_user = AdminUser.new(params[:admin_user])
     @required_password = true
 
+    roles = params[:admin_user][:temporal_roles].split(",")
+    params[:admin_user].delete(:temporal_roles)
+
     respond_to do |format|
       if @admin_user.save
+        roles.map{ |role|
+          @admin_user.add_role role.strip
+        }
+
         format.html { redirect_to @admin_user, notice: 'Admin was successfully created.' }
         format.json { render json: @admin_user, status: :created, location: @admin_user }
       else
@@ -54,6 +62,9 @@ class AdminUsersController < ApplicationController
     @admin_user = AdminUser.find(params[:id])
     @required_password = false
 
+    roles = params[:admin_user][:temporal_roles].split(",")
+    params[:admin_user].delete(:temporal_roles)
+
     if params[:admin_user][:password].blank?
       params[:admin_user].delete(:password)
       params[:admin_user].delete(:password_confirmation)
@@ -61,9 +72,16 @@ class AdminUsersController < ApplicationController
 
     respond_to do |format|
       if @admin_user.update_attributes(params[:admin_user])
+        @admin_user.roles.destroy_all
+
+        roles.map{ |role|
+          @admin_user.add_role role.strip
+        }
+
         format.html { redirect_to @admin_user, notice: 'Admin was successfully updated.' }
         format.json { head :no_content }
       else
+        @admin_user.get_roles
         format.html { render action: "edit" }
         format.json { render json: @admin_user.errors, status: :unprocessable_entity }
       end
