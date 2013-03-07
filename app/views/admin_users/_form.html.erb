@@ -1,0 +1,10 @@
+<%= simple_form_for @admin_user, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :username, :required => true %>
+  <%= f.input :email, :required => true %>
+  <%= f.input :password, :required => @required_password %>
+  <%= f.input :password_confirmation, :required => @required_password %>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,6 +1,5 @@
-class SessionsController < Devise::SessionsController
+class Users::SessionsController < Devise::SessionsController
 
-  # POST /resource/sign_in
   def create
     self.resource = warden.authenticate!(auth_options)
     #self.resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")

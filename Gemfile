@@ -24,6 +24,7 @@ end
 # For user management
 gem 'devise'
 gem 'cancan'
+gem 'rolify'
 
 # For Facebook
 gem 'omniauth'
