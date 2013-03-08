@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   
+  resourcify
+  
   has_many :authentications, :dependent => :delete_all
   
   # Include default devise modules. Others available are:
@@ -8,7 +10,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :first_name, :last_name
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :first_name, :last_name, :active
   
   validates :email, :uniqueness => true
   validates :username, :uniqueness => true
@@ -71,6 +73,10 @@ class User < ActiveRecord::Base
 
   def full_name
     first_name.to_s + " " + last_name.to_s
+  end
+
+  def banned?
+    !active
   end
 
   private

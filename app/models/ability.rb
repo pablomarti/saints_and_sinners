@@ -6,11 +6,17 @@ class Ability
 
     if admin_user.has_role? :admin
     	can :manage, :all
-    elsif admin_user.has_role? :admin_user_manager
-    	can :manage, Role
-    	can :manage, User
-    elsif admin_user.has_role? :user_manager
-    	can :manage, User    	
+    else
+	    if admin_user.has_role? :role_manager
+	    	can :manage, AdminUser
+	    	can :manage, Role
+	    elsif admin_user.has_role? :admin_user_manager
+	    	can :manage, AdminUser	    		
+	    end
+
+	    if admin_user.has_role? :user_manager
+	    	can :manage, User    	
+	    end
     end
   end
 

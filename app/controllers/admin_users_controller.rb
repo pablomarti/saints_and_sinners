@@ -1,9 +1,10 @@
 class AdminUsersController < ApplicationController
 
   before_filter :authenticate_admin_user!
+  before_filter :authorize_admin_user_manager
 
   def index
-    @admin_users = AdminUser.where("id <> ?", current_admin_user.id)
+    @admin_users = AdminUser.get_editable_admins_except(current_admin_user.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -32,6 +33,12 @@ class AdminUsersController < ApplicationController
 
   def edit
     @admin_user = AdminUser.find(params[:id])
+
+    if @admin_user.has_role? :admin
+      flash[:error] = "Access denied"
+      redirect_to root_url
+    end
+
     @admin_user.get_roles
     @required_password = false
   end
@@ -40,14 +47,19 @@ class AdminUsersController < ApplicationController
     @admin_user = AdminUser.new(params[:admin_user])
     @required_password = true
 
-    roles = params[:admin_user][:temporal_roles].split(",")
+    roles = []
+    if can? :manage, Role
+      roles = params[:admin_user][:temporal_roles].split(",")
+    end
     params[:admin_user].delete(:temporal_roles)
 
     respond_to do |format|
       if @admin_user.save
-        roles.map{ |role|
-          @admin_user.add_role role.strip
-        }
+        if can? :manage, Role
+          roles.map{ |role|
+            @admin_user.add_role role.strip
+          }
+        end
 
         format.html { redirect_to @admin_user, notice: 'Admin was successfully created.' }
         format.json { render json: @admin_user, status: :created, location: @admin_user }
@@ -62,7 +74,15 @@ class AdminUsersController < ApplicationController
     @admin_user = AdminUser.find(params[:id])
     @required_password = false
 
-    roles = params[:admin_user][:temporal_roles].split(",")
+    if @admin_user.has_role? :admin
+      flash[:error] = "Access denied"
+      redirect_to root_url
+    end
+
+    roles = []
+    if can? :manage, Role
+      roles = params[:admin_user][:temporal_roles].split(",")
+    end
     params[:admin_user].delete(:temporal_roles)
 
     if params[:admin_user][:password].blank?
@@ -72,11 +92,13 @@ class AdminUsersController < ApplicationController
 
     respond_to do |format|
       if @admin_user.update_attributes(params[:admin_user])
-        @admin_user.roles.destroy_all
+        if can? :manage, Role
+          @admin_user.roles.destroy_all
 
-        roles.map{ |role|
-          @admin_user.add_role role.strip
-        }
+          roles.map{ |role|
+            @admin_user.add_role role.strip
+          }
+        end
 
         format.html { redirect_to @admin_user, notice: 'Admin was successfully updated.' }
         format.json { head :no_content }
@@ -95,6 +117,13 @@ class AdminUsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to admin_users_url }
       format.json { head :no_content }
+    end
+  end
+
+  def authorize_admin_user_manager
+    if !can? :manage, AdminUser
+      flash[:error] = "Access denied"
+      redirect_to root_url
     end
   end
 

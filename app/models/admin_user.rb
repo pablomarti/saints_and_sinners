@@ -24,5 +24,13 @@ class AdminUser < ActiveRecord::Base
   def get_roles
     @temporal_roles = roles.collect{ |role| role.name }.join(", ")
   end
+
+  def banned?
+    !active
+  end
+
+  def self.get_editable_admins_except(admin_id)
+    joins(:roles).where("roles.name <> ? AND admin_users.id <> ?", "admin", admin_id).group(:id)
+  end
   
 end

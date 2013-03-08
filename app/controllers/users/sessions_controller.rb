@@ -14,15 +14,26 @@ class Users::SessionsController < Devise::SessionsController
 
   protected
 
-  def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { :methods => methods, :only => [:password] }
-  end
+      def after_sign_in_path_for(resource)
+        if resource.banned?
+          sign_out resource
+          flash.delete(:notice)
+          flash[:error] = "This account has been suspended."
+          root_path
+        else
+          super
+        end
+      end
 
-  def auth_options
-    { :scope => resource_name, :recall => "#{controller_path}#new" }
-  end
+      def serialize_options(resource)
+        methods = resource_class.authentication_keys.dup
+        methods = methods.keys if methods.is_a?(Hash)
+        methods << :password if resource.respond_to?(:password)
+        { :methods => methods, :only => [:password] }
+      end
+
+      def auth_options
+        { :scope => resource_name, :recall => "#{controller_path}#new" }
+      end
 
 end
