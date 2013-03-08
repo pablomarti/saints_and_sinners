@@ -17,6 +17,7 @@
 # Ignore some other files
 /config/database.yml
 /config/fb_config.yml
+/config/initializers/setup_mail.rb
 *.DS_Store
 db/schema.rb
 Gemfile.lock
